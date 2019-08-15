@@ -4,6 +4,8 @@ import colorlog  # 控制台日志输入颜色
 import time
 import os
 import properties
+import types
+import sys
 
 
 class LocalTimedRotatingFileHandler(TimedRotatingFileHandler):
@@ -170,7 +172,15 @@ class LoggerFactory:
         pkgLevel = config['logger']
 
     @staticmethod
-    def getLogger(_name = None):
+    def getLogger(klass = None):
+        _name = None
+        if klass is None:
+            pass
+        elif isinstance(klass, str):
+            _name = klass
+        elif isinstance(type(klass), object):
+            _name = type(klass).__name__
+
         logger = logging.getLogger(_name)
 
         if _name:
